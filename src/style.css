@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #FCFDFF;
+    margin: 0;
+    padding: 0;
+}
+
+[data-p-active="true"] {
+  background-color: #F2D16D !important;
+  border-radius: 100px !important;
+  color: white !important;
+}
+[data-p-active="false"] {
+  background-color: none!important;
+  border-radius: 100% !important;
+  color: #038013 !important;
+}
