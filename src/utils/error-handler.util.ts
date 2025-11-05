@@ -3,16 +3,21 @@ import { ToastService } from './toast-service.util';
 import { MessageToasts } from './toast-messages.util';
 import app from '../main';
 
-export function handleApiError(error: unknown, customMessage: string = MessageToasts.ERROR_GENERIC): never {
+export function handleApiError(error: unknown, customMessage: string = MessageToasts.ERROR_GENERIC): void {
     const axiosError = error as AxiosError;
     const status = axiosError.response?.status;
-    const serverMessage = (axiosError.response?.data as any)?.message?.[0];
+    const serverMessage = (axiosError.response?.data as any)?.message;
 
     let handled = false;
 
     switch (status) {
         case 400:
             app.config.globalProperties.$toast.add(ToastService.error(serverMessage || 'Dados inválidos.', 'Erro de validação'));
+            handled = true;
+            break;
+
+        case 401:
+            app.config.globalProperties.$toast.add(ToastService.error(serverMessage || 'Não autorizado.', 'Acesso negado'));
             handled = true;
             break;
 

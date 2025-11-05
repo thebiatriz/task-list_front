@@ -1,6 +1,6 @@
 <template>
     <main class="flex flex-col justify-center text-center min-h-screen text-[#666666]">
-        <img src="/page-not-found.svg" alt="Imagem de erro 404 para página não encontrada"
+        <img src="/public/page-not-found.svg" alt="Imagem de erro 404 para página não encontrada"
             class="justify-center h-64 md:h-96" />
         <h1 class="pt-2 text-3xl font-bold text-[#263238]">Erro 404 - Página não encontrada</h1>
         <p>Desculpe, a página que você está procurando não foi encontrada.</p>

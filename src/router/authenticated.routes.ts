@@ -1,27 +1,21 @@
 import type { RouteRecordRaw } from "vue-router";
 import { Views } from "../views/index";
-// export const authenticatedRoutes: Array<RouteRecordRaw> = [
-//     {
-//         path: "/user",
-//         name: "user",
-//         children: [
-//             {
-//                 path: "/",
-//                 name: "userList",
-//                 component: Views.User,
-//             },
-//             {
-//                 path: "/",
-//                 name: "register",
-//                 component: Views.Register,
-//             },
-//             {
-//                 path: "/",
-//                 name: "edit",
-//                 component: Views.Edit
-//             },
-//         ]
-//     },
-// ];
+export const authenticatedRoutes: Array<RouteRecordRaw> = [
+     {
+        path: "/",
+        name: "home",
+        component: Views.Home,
+    },
+    {
+        path: "/users",
+        name: "user",
+        component: Views.User,
+    },
+    {
+        path: "/projects",
+        name: "project",
+        component: Views.Project,
+    }
+];
 
 

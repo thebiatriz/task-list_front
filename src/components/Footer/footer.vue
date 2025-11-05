@@ -1,8 +1,7 @@
 <template>
     <footer
-        class="bg-white border border-[#DDDDDD] text-center bottom-0 w-full text-sm text-[#666666] z-50 py-5 px-[2vh] md:px-[7vh]">
-        <p>&copy; {{ currentYear }} Instituto Robótica Sustentável. Todos os direitos reservados.</p>
-        <router-link to="/team" class="underline">Sobre a equipe</router-link>
+        class="bg-white border border-[#DDDDDD] text-center bottom-0 w-full fixed text-sm text-[#666666] z-50 py-5 px-[2vh] md:px-[7vh]">
+        <p>&copy; {{ currentYear }} Gerenciador de Projetos. Todos os direitos reservados.</p>
     </footer>
 </template>
 

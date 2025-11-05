@@ -1,25 +1,37 @@
-import { AuthRequest } from "../../models/auth.model";
+import { AuthRequest, AuthResponse, AuthUser } from "../../models/auth.model";
 import { LoginRest } from "../../service/rest/login.rest";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject, tap } from "rxjs";
+import { clearAuthData, getStoredUser, saveAuthData } from "../../utils/auth.storage";
 
 export class LoginService {
     constructor(
         private _login = new LoginRest()
-    ) { }
-
-    private login$: Subject<AuthRequest> = new Subject<AuthRequest>();
-    login: Observable<AuthRequest> = this.login$.asObservable();
-
-    loginService(body: AuthRequest): void {
-        this._login
-            .login(body)
-            .pipe()
-            .subscribe({
-                next: (response) => {
-                    this.login$.next(response);
-                }, error(err) {
-                    return err
-                }
-            });
+    ) {
+        const user = getStoredUser();
+        if (user) {
+            this.user$.next(user)
+        }
     }
+
+    private user$: BehaviorSubject<AuthUser | null> = new BehaviorSubject<AuthUser | null>(null);
+    user: Observable<AuthUser | null> = this.user$.asObservable();
+
+    login(body: AuthRequest): Observable<AuthResponse> {
+        return this._login.login(body).pipe(
+            tap({
+                next: (response: AuthResponse) => {
+                    saveAuthData(response.user, response.token);
+                    this.user$.next(response.user);
+                }, error: (error) => {
+                    console.error("Erro no login:", error);
+                }
+            })
+        );
+    }
+
+    logout(): void {
+        clearAuthData();
+        this.user$.next(null);
+    }
+
 }

@@ -8,7 +8,7 @@
             }">
             <template #start>
                 <div @click="navigateTo('/')" class="flex items-center cursor-pointer ml-0 md:ml-4">
-                    <img src="../../assets/images/robotics-logo.svg" alt="logo" class="h-10" />
+                    <img src="/public/icon-notebook.svg" alt="logo" class="h-10" />
                 </div>
             </template>
         </Menubar>
@@ -29,44 +29,12 @@ export default defineComponent({
 
                 },
                 {
-                    label: "Computadores",
-                    items: [
-                        {
-                            label: "Visualizar",
-                            command: () => this.navigateTo('/computer')
-                        },
-                        {
-                            label: "Registrar",
-                            command: () => this.navigateTo('/computer/register')
-                        }
-                    ]
-
+                    label: "Projetos",
+                    command: () => this.navigateTo('/projects')
                 },
                 {
-                    label: "Vendas",
-                    items: [
-                        {
-                            label: "Visualizar",
-                            command: () => this.navigateTo('/sale')
-                        },
-                        {
-                            label: "Registrar",
-                            command: () => this.navigateTo('/computer-output', 'sale')
-                        }
-                    ]
-                },
-                {
-                    label: "Doações",
-                    items: [
-                        {
-                            label: "Visualizar",
-                            command: () => this.navigateTo('/donation')
-                        },
-                        {
-                            label: "Registrar",
-                            command: () => this.navigateTo('/computer-output', 'donation')
-                        }
-                    ]
+                    label: "Minha Conta",
+                    command: () => this.navigateTo('/users')
                 }
             ]
         }

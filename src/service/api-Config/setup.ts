@@ -19,7 +19,10 @@ function initAxios(config: AxiosRequestConfig): AxiosInstance {
 
     defineInstance.interceptors.response.use(
         (response) => response,
-        (error: AxiosError) => handleApiError(error)
+        (error: AxiosError) => {
+            handleApiError(error);
+            return Promise.reject(error);
+        }
     );
 
     return defineInstance;

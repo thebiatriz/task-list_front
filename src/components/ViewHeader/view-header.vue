@@ -2,7 +2,7 @@
     <header class="flex items-center flex-row gap-2 pb-[4.5vh] justify-between">
         <h1 class="font-bold text-2xl md:text-3xl text-[#333333]">
             <span>
-                {{ titleHeader }}&nbsp;<span class="text-[#05A51D]"> {{ titleForRobotics }} </span>
+                {{ titleHeader }}
             </span>
         </h1>
         <div class="flex justify-end items-center md:mr-[2.5vw] md:pr-4 hover:bg-gray-50 rounded-full transition-colors">
@@ -43,9 +43,6 @@ export default defineComponent({
         },
         showButtonBack: {
             type: Boolean,
-        },
-        titleForRobotics: {
-            type: String,
         }
     },
 })

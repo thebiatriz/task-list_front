@@ -1,13 +1,16 @@
 export enum MessageToasts {
-    //COMPUTER
-    SUCCESS_CREATE_COMPUTER = "O computador foi registrado.",
-    SUCCESS_UPDATE_COMPUTER = "O computador foi atualizado.",
-    SUCCESS_DELETE_COMPUTER = "O computador foi deletado.",
+    //LOGIN
+    SUCCESS_LOGIN = "Login realizado",
 
-    //DONATION
+    //USER
+    SUCCESS_CREATE_USER = "O usuário foi criado.",
+    SUCCESS_UPDATE_USER = "O usuário foi atualizado.",
+    SUCCESS_DELETE_USER = "O usuário foi deletado.",
+
+    //PROJECT
     SUCCESS_CREATE_DONATION = "A doação foi registrada.",
 
-    //SALE
+    //TASK
     SUCCESS_CREATE_SALE = "A venda foi registrada.",
 
     //ERROR
