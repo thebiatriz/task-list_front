@@ -10,7 +10,7 @@
                 class="!rounded-full !bg-[#05A51D] hover:!bg-[#058D1A] items-center h-10" type="button"
                 icon="pi pi-plus" />
             <div v-else-if="showButtonBack" class="flex items-center cursor-pointer" @click="$emit('navigate-back')">
-                <Button class="!rounded-full !text-[#05A51D]" severity="secondary" text type="button"
+                <Button class="!rounded-full !text-[#2CA2C4]" severity="secondary" text type="button"
                     icon="pi pi-chevron-circle-left" :pt="{
                         root: {
                             class: [
@@ -22,7 +22,7 @@
                         },
                         icon: { class: '!text-2xl' }
                     }" />
-                <span class="hidden md:block text-[#05A51D]">Voltar</span>
+                <span class="hidden md:block text-[#2CA2C4]">Voltar</span>
             </div>
         </div>
     </header>

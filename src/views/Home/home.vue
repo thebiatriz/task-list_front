@@ -1,6 +1,6 @@
 <template>
     <main class="w-full">
-        <ViewHeader titleHeader="Bem-vindo(a) ao Gerenciador de Projetos"/>
+        <ViewHeader titleHeader="Bem-vindo(a) ao Gerenciador de Projetos" />
 
         <section class="text-[#666666] mt-[5vh]">
             <h2 class="text-lg md:text-xl">O que você pode fazer agora?</h2>

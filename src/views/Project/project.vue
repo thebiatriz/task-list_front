@@ -1,6 +1,6 @@
 <template>
     <main class="w-full">
-        <!-- <ViewHeader titleHeader="Meus Projetos" /> -->
+        <ViewHeader titleHeader="Meus Projetos" :showButtonBack="true" @navigate-back="$router.go(-1)" />
         <div>PROJECT</div>
     </main>
 </template>

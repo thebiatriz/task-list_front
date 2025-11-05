@@ -1,6 +1,6 @@
 <template>
     <main class="w-full">
-        <ViewHeader titleHeader="Minha Conta" />
+        <ViewHeader titleHeader="Minha Conta" :showButtonBack="true" @navigate-back="$router.go(-1)"/>
         <div v-if="!user">
             Carregando dados do usuário...
         </div>
@@ -47,20 +47,8 @@
             </div>
         </Dialog>
 
-        <Dialog v-model:visible="isDeleteDialogOpen" modal :style="{ width: '25rem' }">
-            <template #header>
-                <span class="text-2xl font-bold">Deletar Usuário</span>
-            </template>
-            <div class="flex flex-col gap-4 mt-4">
-                <p class="block mb-8">Você confirma em excluir a sua conta? <br>Essa ação não é reversível.</p>
-                <div class="flex justify-end gap-2 mt-4">
-                    <Button type="button" label="Cancelar" severity="secondary"
-                        @click="isDeleteDialogOpen = false"></Button>
-                    <Button @click="handleDeleteUser" label="Confirmo a exclusão" severity="danger"
-                        variant="outlined" />
-                </div>
-            </div>
-        </Dialog>
+        <DeleteDialog :visible="isDeleteDialogOpen" title="Usuário" description="a sua conta"
+            @cancel-dialog="isDeleteDialogOpen = false" @confirm-delete="handleDeleteUser" />
     </main>
 </template>
 
