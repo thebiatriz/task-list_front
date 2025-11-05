@@ -40,19 +40,21 @@ export class UserService {
             })
     }
 
-    deleteUser(): void {
-        this._user
+    deleteUser(): Observable<any> {
+        return this._user
             .deleteUser()
-            .pipe(take(1))
-            .subscribe({
-                next: () => {
-                    this.user$.next(null);
-                    this.getUsers();
-                },
-                error: (error) => {
-                    this.user$.error(error);
-                }
-            })
+            .pipe(
+                take(1),
+                tap({
+                    next: () => {
+                        this.user$.next(null);
+                        this.getUsers();
+                    },
+                    error: (error) => {
+                        this.user$.error(error);
+                    }
+                })
+            );
     }
 
     createUser(userBody: UserCreatePayload): void {

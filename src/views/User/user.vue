@@ -18,13 +18,16 @@
                         class="!text-[#666666] !bg-[#FFFFFF] hover:!bg-gray-100 !transition-colors !shadow-sm !border-none" />
                     <Button @click="handleLogout" label="Logout"
                         class="!text-[#666666] !bg-[#FFFFFF] hover:!bg-gray-100 !transition-colors !shadow-sm !border-none" />
-                    <Button label="Excluir Conta"
+                    <Button @click="openDeleteDialog" label="Excluir Conta"
                         class="!text-[#f56d6d] !bg-[#FFFFFF] hover:!bg-gray-100 !transition-colors !shadow-sm shadow-[#eec9c9] !border-none" />
                 </div>
             </section>
         </div>
 
-        <Dialog v-model:visible="isEditDialogOpen" modal header="Editar Usuário" :style="{ width: '25rem' }">
+        <Dialog v-model:visible="isEditDialogOpen" modal :style="{ width: '25rem' }">
+            <template #header>
+                <span class="text-2xl font-bold">Editar Usuário</span>
+            </template>
             <div class="flex flex-col gap-4 mt-4">
                 <div class="flex flex-col gap-2">
                     <label for="edit-name">Nome</label>
@@ -40,6 +43,21 @@
                     <Button type="button" label="Cancelar" severity="secondary"
                         @click="isEditDialogOpen = false"></Button>
                     <Button @click="handleUpdateUser" class="!bg-[#40BDFF] hover:!bg-[#39a6e0]" label="Salvar"></Button>
+                </div>
+            </div>
+        </Dialog>
+
+        <Dialog v-model:visible="isDeleteDialogOpen" modal :style="{ width: '25rem' }">
+            <template #header>
+                <span class="text-2xl font-bold">Deletar Usuário</span>
+            </template>
+            <div class="flex flex-col gap-4 mt-4">
+                <p class="block mb-8">Você confirma em excluir a sua conta? <br>Essa ação não é reversível.</p>
+                <div class="flex justify-end gap-2 mt-4">
+                    <Button type="button" label="Cancelar" severity="secondary"
+                        @click="isDeleteDialogOpen = false"></Button>
+                    <Button @click="handleDeleteUser" label="Confirmo a exclusão" severity="danger"
+                        variant="outlined" />
                 </div>
             </div>
         </Dialog>
@@ -69,6 +87,7 @@ export default defineComponent({
                 name: "" as string
             },
             isEditDialogOpen: false as boolean,
+            isDeleteDialogOpen: false as boolean,
             userToUpdate: {
                 name: "" as string,
                 email: "" as string
@@ -85,6 +104,11 @@ export default defineComponent({
                     console.error("Erro ao obter dados do usuário: ", err);
                 }
             });
+        },
+        openDeleteDialog(): void {
+            if (!this.user) return;
+
+            this.isDeleteDialogOpen = true;
         },
         openEditDialog(): void {
             if (!this.user) return;
@@ -117,6 +141,19 @@ export default defineComponent({
                     console.error("Erro ao atualizar:", error);
                 }
             })
+        },
+        handleDeleteUser(): void {
+            if (!this.userService) return;
+
+            this.userService.deleteUser().subscribe({
+                next: () => {
+                    this.$toast.add(ToastService.success(MessageToasts.SUCCESS_DELETE_USER));
+                    this.$router.push("/login");
+                },
+                error: (error) => {
+                    console.error("Erro ao deletar:", error);
+                }
+            });
         },
         handleLogout(): void {
             this.loginService.logout();
