@@ -14,7 +14,7 @@
             <section class="mt-10">
                 <h2 class="text-lg md:text-xl">O que você pode fazer agora?</h2>
                 <div class="flex flex-col gap-4 mt-[2vh] justify-center">
-                    <Button @click="isEditDialogOpen = true" label="Editar Dados"
+                    <Button @click="openEditDialog" label="Editar Dados"
                         class="!text-[#666666] !bg-[#FFFFFF] hover:!bg-gray-100 !transition-colors !shadow-sm !border-none" />
                     <Button @click="handleLogout" label="Logout"
                         class="!text-[#666666] !bg-[#FFFFFF] hover:!bg-gray-100 !transition-colors !shadow-sm !border-none" />
@@ -25,8 +25,7 @@
         </div>
 
         <Dialog v-model:visible="isEditDialogOpen" modal header="Editar Usuário" :style="{ width: '25rem' }">
-            <form @submit.prevent="handleUpdateUser" class="flex flex-col gap-4 mt-4">
-
+            <div class="flex flex-col gap-4 mt-4">
                 <div class="flex flex-col gap-2">
                     <label for="edit-name">Nome</label>
                     <InputText id="edit-name" v-model="userToUpdate.name" />
@@ -40,9 +39,9 @@
                 <div class="flex justify-end gap-2 mt-4">
                     <Button type="button" label="Cancelar" severity="secondary"
                         @click="isEditDialogOpen = false"></Button>
-                    <Button type="submit" class="!bg-[#40BDFF] hover:!bg-[#39a6e0]" label="Salvar"></Button>
+                    <Button @click="handleUpdateUser" class="!bg-[#40BDFF] hover:!bg-[#39a6e0]" label="Salvar"></Button>
                 </div>
-            </form>
+            </div>
         </Dialog>
     </main>
 </template>
@@ -56,6 +55,7 @@ import { UserService } from "./user.service";
 import type { UserUpdatePayload } from "../../service/rest/user.rest";
 import { ToastService } from "../../utils/toast-service.util";
 import { MessageToasts } from "../../utils/toast-messages.util";
+import { getStoredToken, saveAuthData } from "../../utils/auth.storage";
 
 export default defineComponent({
     name: "user",
@@ -102,19 +102,21 @@ export default defineComponent({
                 email: this.userToUpdate.email,
             };
 
-            this.userService.user.subscribe({
-                next: (response: any) => {
+            this.userService.updateUser(payload).subscribe({
+                next: (response) => {
                     this.user = response.data;
+                    const token = getStoredToken();
+                    if (token && this.user) {
+                        saveAuthData(this.user, token);
+                    }
+
                     this.$toast.add(ToastService.success(MessageToasts.SUCCESS_UPDATE_USER));
                     this.isEditDialogOpen = false;
                 },
-                error: (error: any) => {
+                error: (error) => {
                     console.error("Erro ao atualizar:", error);
                 }
-            });
-
-            this.userService.updateUser(payload)
-
+            })
         },
         handleLogout(): void {
             this.loginService.logout();

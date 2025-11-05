@@ -6,10 +6,11 @@ const get = <T>(
     url: string,
     params?: object,
     baseURL?: string,
-    responseType: ResponseType = "json"
+    responseType: ResponseType = "json",
+    token?: string
 ): Observable<T> => {
     return defer(() =>
-        api(baseURL).get<T>(url, { params, responseType })
+        api(baseURL, token).get<T>(url, { params, responseType })
     ).pipe(map((result) => result.data));
 };
 
@@ -17,9 +18,10 @@ const post = <T>(
     url: string,
     body: object,
     params?: object,
-    baseURL?: string
+    baseURL?: string,
+    token?: string
 ): Observable<T | void> => {
-    return defer(() => api(baseURL).post<T>(url, body, { params })).pipe(
+    return defer(() => api(baseURL, token).post<T>(url, body, { params })).pipe(
         map((result) => result.data)
     );
 };
@@ -28,9 +30,10 @@ const put = <T>(
     url: string,
     body: object,
     params?: object,
-    baseURL?: string
+    baseURL?: string,
+    token?: string
 ): Observable<T | void> => {
-    return defer(() => api(baseURL).put<T>(url, body, { params })).pipe(
+    return defer(() => api(baseURL, token).put<T>(url, body, { params })).pipe(
         map((result) => result.data)
     );
 };
@@ -39,18 +42,20 @@ const patch = <T>(
     url: string,
     baseURL: string,
     body?: object,
-    params?: object
+    params?: object,
+    token?: string
 ): Observable<T | void> => {
-    return defer(() => api(baseURL).patch<T>(url, body, { params })).pipe(
+    return defer(() => api(baseURL, token).patch<T>(url, body, { params })).pipe(
         map((result) => result.data)
     );
 };
 
 const deleteR = <T>(
     url: string,
-    baseURL?: string
+    baseURL?: string,
+    token?: string
 ): Observable<T | void> => {
-    return defer(() => api(baseURL).delete(`${url}`)).pipe(
+    return defer(() => api(baseURL, token).delete(`${url}`)).pipe(
         map((result) => result.data)
     );
 };

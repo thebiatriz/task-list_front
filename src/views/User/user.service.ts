@@ -1,4 +1,4 @@
-import { Observable, Subject, take } from "rxjs";
+import { Observable, Subject, take, tap } from "rxjs";
 import { UserRest, type UserCreatePayload, type UserUpdatePayload } from "../../service/rest/user.rest";
 
 export class UserService {
@@ -70,17 +70,19 @@ export class UserService {
             })
     }
 
-    updateUser(userBody: UserUpdatePayload): void {
-        this._user
+    updateUser(userBody: UserUpdatePayload): Observable<any> {
+        return this._user
             .updateUser(userBody)
-            .pipe(take(1))
-            .subscribe({
-                next: (response) => {
-                    this.user$.next(response);
-                },
-                error: (error) => {
-                    this.user$.error(error);
-                }
-            })
+            .pipe(
+                take(1),
+                tap({
+                    next: (response) => {
+                        this.user$.next(response);
+                    }, error: (error) => {
+                        this.user$.error(error);
+                    }
+                })
+            )
+
     }
 }
