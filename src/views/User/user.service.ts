@@ -51,25 +51,26 @@ export class UserService {
                         this.getUsers();
                     },
                     error: (error) => {
-                        this.user$.error(error);
+                        console.error(error);
                     }
                 })
             );
     }
 
-    createUser(userBody: UserCreatePayload): void {
-        this._user
+    createUser(userBody: UserCreatePayload): Observable<any> {
+        return this._user
             .createUser(userBody)
-            .pipe(take(1))
-            .subscribe({
-                next: (response) => {
-                    this.user$.next(response);
-                    this.getUsers();
-                },
-                error: (error) => {
-                    this.user$.error(error);
-                }
-            })
+            .pipe(take(1),
+                tap({
+                    next: (response) => {
+                        this.user$.next(response);
+                        this.getUsers();
+                    },
+                    error: (error) => {
+                        console.error(error)
+                    }
+                })
+            );
     }
 
     updateUser(userBody: UserUpdatePayload): Observable<any> {
@@ -81,7 +82,7 @@ export class UserService {
                     next: (response) => {
                         this.user$.next(response);
                     }, error: (error) => {
-                        this.user$.error(error);
+                        console.error(error);
                     }
                 })
             )

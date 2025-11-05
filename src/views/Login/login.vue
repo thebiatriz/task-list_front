@@ -6,6 +6,8 @@
                 <div class="flex flex-col px-8 py-8 gap-6 rounded-2xl"
                     style="background-image: radial-gradient(circle at left top, #1F3A78, #000000);">
                     <img src="/public/icon-notebook.svg" alt="Imagem de laptop" class="block mx-auto w-10 h-10" />
+                    <p class="text-indigo-100 font-semibold text-center text-lg mb-4">
+                        {{ isCreatingAccount ? 'Criar Conta' : 'Fazer Login' }}</p>
                     <div v-if="isCreatingAccount" class="inline-flex flex-col gap-2">
                         <label for="username" class="text-indigo-100 font-semibold">Nome</label>
                         <InputText v-model="inputUserName" required id="registration" maxlength="12"
@@ -39,7 +41,9 @@ import { defineComponent } from "vue";
 import { LoginService } from "./auth.service";
 import { ToastService } from "../../utils/toast-service.util";
 import { MessageToasts } from "../../utils/toast-messages.util";
-import { AuthRequest } from "../../models/auth.model";
+import { AuthRequest, AuthUser } from "../../models/auth.model";
+import type { UserCreatePayload } from "../../service/rest/user.rest";
+import { UserService } from "../User/user.service";
 
 export default defineComponent({
     name: "login",
@@ -50,7 +54,9 @@ export default defineComponent({
             inputUserEmail: "" as string,
             inputUserPassword: "" as string,
             isCreatingAccount: false as boolean,
-            loginService: null as LoginService | null
+            loginService: null as LoginService | null,
+            userService: new UserService(),
+            userToCreate: null as AuthUser | null,
         }
     },
     created() {
@@ -65,7 +71,22 @@ export default defineComponent({
             else this.login();
         },
         createUser(): void {
-            alert('CRIANDO USUARIO')
+            if (!this.userService) return;
+
+            const payload: UserCreatePayload = {
+                email: this.inputUserEmail,
+                name: this.inputUserName,
+                password: this.inputUserPassword
+            };
+
+            this.userService.createUser(payload).subscribe({
+                next: () => {
+                    this.$toast.add(ToastService.success(MessageToasts.SUCCESS_CREATE_USER));
+                    this.changeMethodToSend();
+                }, error: (error) => {
+                    console.log("Erro ao criar usuário", error)
+                }
+            })
         },
         login(): void {
             if (!this.loginService) return;
