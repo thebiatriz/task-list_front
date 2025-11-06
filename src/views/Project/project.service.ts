@@ -27,7 +27,7 @@ export class ProjectService {
                     this.allProjects$.next(response);
                 },
                 error: (error) => {
-                    this.allProjects$.error(error);
+                    console.error("Erro ao criar task:", error);
                 }
             })
     }
@@ -41,7 +41,7 @@ export class ProjectService {
                     this.project$.next(response);
                 },
                 error: (error) => {
-                    this.project$.error(error);
+                    console.error("Erro ao criar task:", error);
                 }
             })
     }
@@ -57,7 +57,7 @@ export class ProjectService {
                         this.getProjects();
                     },
                     error: (error) => {
-                        this.project$.error(error);
+                        console.error("Erro ao criar task:", error);
                     }
                 })
             );
@@ -73,7 +73,7 @@ export class ProjectService {
                         this.getProjects()
                     },
                     error: (error) => {
-                        this.project$.error(error);
+                        console.error("Erro ao criar task:", error);
                     }
                 })
             );
@@ -89,7 +89,7 @@ export class ProjectService {
                         this.getProjects()
                     },
                     error: (error) => {
-                        this.project$.error(error);
+                        console.error("Erro ao criar task:", error);
                     }
                 })
             );
@@ -104,22 +104,24 @@ export class ProjectService {
                     this.allTasks$.next(response);
                 },
                 error: (error) => {
-                    this.allTasks$.error(error);
+                    console.error("Erro ao criar task:", error);
                 }
             })
     }
 
-    createTask(id: string, task: TaskCreatePayload): void {
-        this._project
+    createTask(id: string, task: TaskCreatePayload): Observable<any> {
+        return this._project
             .createTask(id, task)
-            .pipe(take(1))
-            .subscribe({
-                next: (response) => {
-                    this.task$.next(response);
-                },
-                error: (error) => {
-                    this.task$.error(error);
-                }
-            })
+            .pipe(take(1),
+                tap({
+                    next: (response) => {
+                        this.task$.next(response);
+                        this.getTasks(id)
+                    },
+                    error: (error) => {
+                        console.error("Erro ao criar task:", error);
+                    }
+                })
+            );
     }
 }

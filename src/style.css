@@ -7,13 +7,9 @@ body {
     padding: 0;
 }
 
-[data-p-active="true"] {
-  background-color: #F2D16D !important;
-  border-radius: 100px !important;
-  color: white !important;
+[data-p-highlight="true"] {
+  background-color: blue !important;
+  border-color: blue !important;
 }
-[data-p-active="false"] {
-  background-color: none!important;
-  border-radius: 100% !important;
-  color: #038013 !important;
-}
+
+/* :bg-blue-500 data-[p-highlight=true]:border-blue-500' */

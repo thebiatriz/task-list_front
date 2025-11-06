@@ -18,23 +18,24 @@ export class TaskService {
                     this.task$.next(response);
                 },
                 error: (error) => {
-                    this.task$.error(error);
+                    console.error("Erro ao criar task:", error);
                 }
             })
     }
 
-    deleteTask(id: string): void {
-        this._task
+    deleteTask(id: string): Observable<any> {
+        return this._task
             .deleteTask(id)
-            .pipe(take(1))
-            .subscribe({
-                next: () => {
-                    this.task$.next(null);
-                },
-                error: (error) => {
-                    this.task$.error(error);
-                }
-            })
+            .pipe(take(1),
+                tap({
+                    next: () => {
+                        this.task$.next(null);
+                    },
+                    error: (error) => {
+                        console.error("Erro ao criar task:", error);
+                    }
+                })
+            )
     }
 
     updateTask(id: string, task: TaskUpdatePayload): Observable<any> {
@@ -46,7 +47,7 @@ export class TaskService {
                         this.task$.next(response);
                     },
                     error: (error) => {
-                        this.task$.error(error);
+                        console.error("Erro ao criar task:", error);
                     }
                 })
             )

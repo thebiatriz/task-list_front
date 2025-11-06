@@ -17,6 +17,7 @@ export enum MessageToasts {
     SUCCESS_CREATE_TASK = "A atividade foi criada.",
     SUCCESS_UPDATE_TASK = "A atividade foi atualizada.",
     SUCCESS_DELETE_TASK = "A atividade foi deletada.",
+    ERROR_EMPTY_TASK_DESCRIPTION = "A descrição da atividade não pode estar vazia.",
 
     //ERROR
     ERROR_GENERIC = "Erro inesperado. Tente novamente mais tarde.",

@@ -1,10 +1,8 @@
 import { Observable } from "rxjs";
 import api from '../api-Config/rxjs.config';
+import type { Task } from "../../models/task.model";
 
-export interface TaskCreatePayload {
-    description: string;
-    isComplete: boolean;
-}
+export type TaskCreatePayload = Partial<Pick<Task, 'description' | 'isComplete'>>;
 
 export class ProjectRest {
     getProjects(): Observable<any> {

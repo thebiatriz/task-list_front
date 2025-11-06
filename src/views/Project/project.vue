@@ -99,7 +99,6 @@ export default defineComponent({
 
             this.isProjectFormDialogOpen = true;
         },
-
         verifyMethodToSend(): void {
             if (this.isUpdatingProject) this.updateProject();
             else this.createProject();
