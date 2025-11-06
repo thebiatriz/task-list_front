@@ -17,7 +17,7 @@
                     <article v-for="task in tasksList.items" :key="task.id"
                         class="cursor-pointer flex justify-between items-center bg-[#FCFDFF] border border-[#DDDDDD] text-[#666666] rounded-lg p-3 mb-6">
                         <div class="flex items-center gap-3">
-                            <Checkbox v-model="task.isComplete" :binary="true" @change="updateTaskStatus(task)" :pt="{
+                            <Checkbox v-model="task.isComplete" :binary="true" :id="'check-' + task.id" @change="updateTaskStatus(task)" :pt="{
                                 box: {
                                     class: task.isComplete
                                         ? '!border-[#40BDFF] !bg-[#40BDFF] hover:!bg-[#39a6e0]'
@@ -25,9 +25,9 @@
                                 }
                             }" />
 
-                            <span class="text-[#666666]" :class="{ 'line-through': task.isComplete }">
+                            <label :for="'check-' + task.id" class="text-[#666666]" :class="{ 'line-through': task.isComplete }">
                                 {{ task.description }}
-                            </span>
+                            </label>
                         </div>
 
                         <Button @click.stop="showToggleOptions($event, task)" type="button" severity="secondary" text

@@ -24,13 +24,8 @@ export default defineComponent({
         return {
             items: [
                 {
-                    label: "Home",
-                    command: () => this.navigateTo('/')
-
-                },
-                {
                     label: "Projetos",
-                    command: () => this.navigateTo('/projects')
+                    command: () => this.navigateTo('/')
                 },
                 {
                     label: "Minha Conta",

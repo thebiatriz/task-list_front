@@ -1,8 +1,4 @@
 export class Views {
-    static Home(): Promise<any> {
-        return import("./Home/home.vue");
-    }
-
     static NotFound(): Promise<any> {
         return import("./NotFound/not-found.vue");
     }

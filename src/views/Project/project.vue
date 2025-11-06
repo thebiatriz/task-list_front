@@ -14,7 +14,7 @@
 
                 <template #list="projectList">
                     <article v-for="project in projectList.items" :key="project.id" @click="openTask(project.id)"
-                        class="cursor-pointer flex flex-col bg-[#FCFDFF] border border-[#DDDDDD] text-[#666666] rounded-lg p-3 mb-6">
+                        class="cursor-pointer flex justify-between items-center bg-[#FCFDFF] border border-[#DDDDDD] text-[#666666] rounded-lg p-3 mb-6">
                         <span class="text-[#666666]">{{ project.name }}</span>
                         <Button @click.stop="showToggleOptions($event, project)" type="button" severity="secondary" text
                             aria-label="Botão de opções para editar e deletar" icon="pi pi-ellipsis-v"
