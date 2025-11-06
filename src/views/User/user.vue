@@ -1,6 +1,6 @@
 <template>
     <main class="w-full">
-        <ViewHeader titleHeader="Minha Conta" :showButtonBack="true" @navigate-back="$router.go(-1)"/>
+        <ViewHeader titleHeader="Minha Conta" :showButtonBack="true" @navigate-back="$router.go(-1)" />
         <div v-if="!user">
             Carregando dados do usuário...
         </div>
@@ -42,7 +42,8 @@
                 <div class="flex justify-end gap-2 mt-4">
                     <Button type="button" label="Cancelar" severity="secondary"
                         @click="isEditDialogOpen = false"></Button>
-                    <Button @click="handleUpdateUser" class="!bg-[#40BDFF] hover:!bg-[#39a6e0]" label="Salvar"></Button>
+                    <Button @click="handleUpdateUser" class="!bg-[#40BDFF] hover:!bg-[#39a6e0]" label="Salvar"
+                        :loading="isSubmitting" :disabled="isSubmitting"></Button>
                 </div>
             </div>
         </Dialog>
@@ -79,7 +80,8 @@ export default defineComponent({
             userToUpdate: {
                 name: "" as string,
                 email: "" as string
-            }
+            },
+            isSubmitting: false as boolean,
         }
     },
     methods: {
@@ -108,6 +110,7 @@ export default defineComponent({
         },
         handleUpdateUser(): void {
             if (!this.userService) return;
+            this.isSubmitting = true;
 
             const payload: UserUpdatePayload = {
                 name: this.userToUpdate.name,
@@ -124,22 +127,30 @@ export default defineComponent({
 
                     this.$toast.add(ToastService.success(MessageToasts.SUCCESS_UPDATE_USER));
                     this.isEditDialogOpen = false;
+                    this.isSubmitting = false;
                 },
                 error: (error) => {
                     console.error("Erro ao atualizar:", error);
+                    this.isSubmitting = false;
                 }
             })
         },
         handleDeleteUser(): void {
             if (!this.userService) return;
 
+            this.isSubmitting = true;
+
             this.userService.deleteUser().subscribe({
                 next: () => {
                     this.$toast.add(ToastService.success(MessageToasts.SUCCESS_DELETE_USER));
                     this.$router.push("/login");
+                    this.isSubmitting = false;
+
                 },
                 error: (error) => {
                     console.error("Erro ao deletar:", error);
+                    this.isSubmitting = false;
+
                 }
             });
         },

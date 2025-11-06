@@ -17,15 +17,17 @@
                     <article v-for="task in tasksList.items" :key="task.id"
                         class="cursor-pointer flex justify-between items-center bg-[#FCFDFF] border border-[#DDDDDD] text-[#666666] rounded-lg p-3 mb-6">
                         <div class="flex items-center gap-3">
-                            <Checkbox v-model="task.isComplete" :binary="true" :id="'check-' + task.id" @change="updateTaskStatus(task)" :pt="{
-                                box: {
-                                    class: task.isComplete
-                                        ? '!border-[#40BDFF] !bg-[#40BDFF] hover:!bg-[#39a6e0]'
-                                        : '!border-gray-300 !bg-white hover:!border-[#40BDFF]'
-                                }
-                            }" />
+                            <Checkbox v-model="task.isComplete" :binary="true" :id="'check-' + task.id"
+                                @change="updateTaskStatus(task)" :pt="{
+                                    box: {
+                                        class: task.isComplete
+                                            ? '!border-[#40BDFF] !bg-[#40BDFF] hover:!bg-[#39a6e0]'
+                                            : '!border-gray-300 !bg-white hover:!border-[#40BDFF]'
+                                    }
+                                }" />
 
-                            <label :for="'check-' + task.id" class="text-[#666666]" :class="{ 'line-through': task.isComplete }">
+                            <label :for="'check-' + task.id" class="text-[#666666]"
+                                :class="{ 'line-through': task.isComplete }">
                                 {{ task.description }}
                             </label>
                         </div>
@@ -54,7 +56,8 @@
                     <div class="flex justify-end gap-2 mt-4">
                         <Button type="button" label="Cancelar" severity="secondary"
                             @click="isTaskFormDialogOpen = false"></Button>
-                        <Button @click="verifyMethodToSend" class="!bg-[#40BDFF] hover:!bg-[#39a6e0]">
+                        <Button @click="verifyMethodToSend" :loading="isSubmitting" :disabled="isSubmitting"
+                            class="!bg-[#40BDFF] hover:!bg-[#39a6e0]" :class="{ '!cursor-progress': isSubmitting }">
                             {{ isUpdatingDescription ? 'Editar' : 'Criar' }}
                         </Button>
                     </div>
@@ -87,6 +90,7 @@ export default defineComponent({
             ] as Object[],
             selectedTask: null as Task | null,
             isDeleteDialogOpen: false as boolean,
+            isSubmitting: false as boolean,
             taskService: new TaskService(),
             taskSubscription: null as Subscription | null,
             projectSubscription: null as Subscription | null,
@@ -120,14 +124,14 @@ export default defineComponent({
         },
         getTasks(): void {
             this.taskSubscription = this.projectService.allTasks.subscribe({
-                    next: (response) => {
-                        this.allTasks = response.data
-                        this.isLoading = false;
-                    }, error: (error) => {
-                        console.log("Erro ao buscar os atividades: ", error)
-                        this.isLoading = false;
-                    }
-                });
+                next: (response) => {
+                    this.allTasks = response.data
+                    this.isLoading = false;
+                }, error: (error) => {
+                    console.log("Erro ao buscar os atividades: ", error)
+                    this.isLoading = false;
+                }
+            });
 
             if (this.currentProjectId) {
                 this.projectService.getTasks(this.currentProjectId);
@@ -154,6 +158,8 @@ export default defineComponent({
         createTask(): void {
             if (!this.projectService) return;
 
+            this.isSubmitting = true;
+
             if (!this.isTaskDescriptionBlank(this.newTaskDescription) && this.currentProjectId) {
                 const payload: TaskCreatePayload = {
                     description: this.newTaskDescription
@@ -164,8 +170,11 @@ export default defineComponent({
                         this.$toast.add(ToastService.success(MessageToasts.SUCCESS_CREATE_PROJECT));
                         this.isTaskFormDialogOpen = false;
                         this.newTaskDescription = "";
+                        this.isSubmitting = false;
+
                     }, error: (error) => {
                         console.error("Erro ao criar:", error);
+                        this.isSubmitting = false;
                     }
                 })
             } else {
@@ -176,6 +185,8 @@ export default defineComponent({
             if (!this.taskService) return;
 
             if (!this.isTaskDescriptionBlank(this.newTaskDescription) && this.selectedTask) {
+                this.isSubmitting = true; 
+
                 const payload: TaskUpdatePayload = {
                     description: this.newTaskDescription,
                 };
@@ -185,20 +196,22 @@ export default defineComponent({
                 this.taskService.updateTask(taskId, payload)
                     .subscribe({
                         next: () => {
-                            console.log("Task atualizada")
+                            console.log("Task atualizada");
                             this.getTasks();
                             this.isTaskFormDialogOpen = false;
                             this.newTaskDescription = "";
+                            this.isSubmitting = false;
                         },
                         error: (error) => {
                             console.error("Erro ao atualizar a atividade:", error);
+                            this.isSubmitting = false; 
                         }
                     });
             } else {
                 this.$toast.add(ToastService.error(MessageToasts.ERROR_EMPTY_TASK_DESCRIPTION, "Erro ao atualizar"));
             }
-
         },
+
         deleteTask(): void {
             if (this.selectedTask && this.taskService) {
                 this.taskService.deleteTask(String(this.selectedTask.id)).subscribe({

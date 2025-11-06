@@ -9,11 +9,15 @@ function apiConfig(baseUrl: string): AxiosRequestConfig {
     };
 }
 
-function initAxios(config: AxiosRequestConfig, token?: string): AxiosInstance {
+function initAxios(config: AxiosRequestConfig): AxiosInstance {
     const defineInstance = axios.create(config);
+
     defineInstance.interceptors.request.use(
         (request) => {
-            request.headers.Authorization = token ?? `Bearer ${getStoredToken()}`;
+            const token = getStoredToken();
+            if (token) {
+                request.headers['Authorization'] = `Bearer ${token}`;
+            }
             return request;
         },
         (error) => Promise.reject(error)
@@ -22,6 +26,13 @@ function initAxios(config: AxiosRequestConfig, token?: string): AxiosInstance {
     defineInstance.interceptors.response.use(
         (response) => response,
         (error: AxiosError) => {
+            const status = error.response?.status;
+            const currentPath = window.location.pathname;
+
+            if (status === 401 && currentPath === '/login') {
+                return Promise.reject(error);
+            }
+
             handleApiError(error);
             return Promise.reject(error);
         }
@@ -30,8 +41,8 @@ function initAxios(config: AxiosRequestConfig, token?: string): AxiosInstance {
     return defineInstance;
 }
 
-function api(baseURL = import.meta.env.VITE_APP_BASE_URL, token?: string) {
-    return initAxios(apiConfig(baseURL), token);
+function api(baseURL = import.meta.env.VITE_APP_BASE_URL) {
+    return initAxios(apiConfig(baseURL));
 }
 
 export default api;

@@ -39,7 +39,8 @@
                 <div class="flex justify-end gap-2 mt-4">
                     <Button type="button" label="Cancelar" severity="secondary"
                         @click="isProjectFormDialogOpen = false"></Button>
-                    <Button @click="verifyMethodToSend" class="!bg-[#40BDFF] hover:!bg-[#39a6e0]">
+                    <Button @click="verifyMethodToSend" :loading="isSubmitting" :disabled="isSubmitting"
+                        class="!bg-[#40BDFF] hover:!bg-[#39a6e0]" :class="{ '!cursor-progress': isSubmitting }">
                         {{ isUpdatingProject ? 'Editar' : 'Criar' }}
                     </Button>
                 </div>
@@ -74,10 +75,9 @@ export default defineComponent({
             projectService: new ProjectService(),
             projectSubscription: null as Subscription | null,
             isLoading: true as boolean,
+            isSubmitting: false as boolean,
             newProjectName: "" as string,
             isUpdatingProject: false as boolean,
-
-
             isProjectFormDialogOpen: false as boolean
         }
     },
@@ -121,14 +121,19 @@ export default defineComponent({
         createProject(): void {
             if (!this.projectService) return;
 
+            this.isSubmitting = true;
+
             if (!this.isProjectNameBlank(this.newProjectName)) {
                 this.projectService.createProject(this.newProjectName).subscribe({
                     next: () => {
                         this.$toast.add(ToastService.success(MessageToasts.SUCCESS_CREATE_PROJECT));
                         this.isProjectFormDialogOpen = false;
                         this.newProjectName = "";
-                    }, error: (error) => {
+                        this.isSubmitting = false;
+                    },
+                    error: (error) => {
                         console.error("Erro ao criar:", error);
+                        this.isSubmitting = false;
                     }
                 })
             } else {
@@ -138,14 +143,19 @@ export default defineComponent({
         updateProject(): void {
             if (!this.projectService) return;
 
+            this.isSubmitting = true;
+
             if (!this.isProjectNameBlank(this.newProjectName) && this.selectedProject) {
                 this.projectService.updateProject(String(this.selectedProject.id), this.newProjectName).subscribe({
                     next: () => {
                         this.$toast.add(ToastService.success(MessageToasts.SUCCESS_UPDATE_PROJECT));
                         this.isProjectFormDialogOpen = false;
                         this.newProjectName = "";
-                    }, error: (error) => {
+                        this.isSubmitting = false;
+                    },
+                    error: (error) => {
                         console.error("Erro ao atualizar:", error);
+                        this.isSubmitting = false;
                     }
                 })
             } else {
@@ -154,14 +164,14 @@ export default defineComponent({
         },
         getProjects(): void {
             this.projectSubscription = this.projectService.allProjects.subscribe({
-                    next: (response) => {
-                        this.allProjects = response.data;
-                        this.isLoading = false;
-                    }, error: (error) => {
-                        console.log("Erro ao buscar os projetos: ", error);
-                        this.isLoading = false;
-                    }
-                });
+                next: (response) => {
+                    this.allProjects = response.data;
+                    this.isLoading = false;
+                }, error: (error) => {
+                    console.log("Erro ao buscar os projetos: ", error);
+                    this.isLoading = false;
+                }
+            });
 
             this.projectService.getProjects();
         },

@@ -24,7 +24,8 @@
                             class="!bg-white/20 !border-0 !p-4 !text-white w-80" type="password" />
                     </div>
                     <div class="flex items-center gap-4">
-                        <Button :label="isCreatingAccount ? 'Criar' : 'Entrar'" type="submit" text
+                        <Button :label="isCreatingAccount ? 'Criar' : 'Entrar'" type="submit" :loading="isSubmitting"
+                            :disabled="isSubmitting" text :class="{ '!cursor-progress': isSubmitting }"
                             class="!p-4 w-full !text-white !border !border-[#1F3A78] hover:!bg-white/10" />
                     </div>
                     <a @click="changeMethodToSend"
@@ -44,6 +45,7 @@ import { MessageToasts } from "../../utils/toast-messages.util";
 import { AuthRequest, AuthUser } from "../../models/auth.model";
 import type { UserCreatePayload } from "../../service/rest/user.rest";
 import { UserService } from "../User/user.service";
+import { take } from "rxjs";
 
 export default defineComponent({
     name: "login",
@@ -57,6 +59,7 @@ export default defineComponent({
             loginService: null as LoginService | null,
             userService: new UserService(),
             userToCreate: null as AuthUser | null,
+            isSubmitting: false as boolean,
         }
     },
     created() {
@@ -73,23 +76,30 @@ export default defineComponent({
         createUser(): void {
             if (!this.userService) return;
 
+            this.isSubmitting = true;
+
             const payload: UserCreatePayload = {
                 email: this.inputUserEmail,
                 name: this.inputUserName,
                 password: this.inputUserPassword
             };
 
-            this.userService.createUser(payload).subscribe({
+            this.userService.createUser(payload).pipe(take(1)).subscribe({
                 next: () => {
                     this.$toast.add(ToastService.success(MessageToasts.SUCCESS_CREATE_USER));
                     this.changeMethodToSend();
-                }, error: (error) => {
-                    console.log("Erro ao criar usuário", error)
+                    this.isSubmitting = false;
+                }, 
+                error: (error) => {
+                    console.log("Erro ao criar usuário", error);
+                    this.isSubmitting = false;
                 }
             })
         },
         login(): void {
             if (!this.loginService) return;
+
+            this.isSubmitting = true;
 
             const payload = new AuthRequest(this.inputUserEmail, this.inputUserPassword)
 
@@ -98,11 +108,12 @@ export default defineComponent({
                 next: () => {
                     this.isDialogVisible = false;
                     this.$toast.add(ToastService.success(MessageToasts.SUCCESS_LOGIN));
-                    this.$router.push("/")
+                    this.$router.push("/");
+                    this.isSubmitting = false;
                 },
-
                 error: (error) => {
-                    console.log("Erro ao realizar login:", error)
+                    console.log("Erro ao realizar login:", error);
+                    this.isSubmitting = false;
                 }
             });
         },
