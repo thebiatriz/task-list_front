@@ -8,7 +8,7 @@ export interface TaskCreatePayload {
 
 export class ProjectRest {
     getProjects(): Observable<any> {
-        return api.get(`/projects`);
+        return api.get('/projects');
     }
     getProjectById(id: string): Observable<any> {
         return api.get(`/projects/${id}`);

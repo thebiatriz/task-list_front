@@ -1,4 +1,4 @@
-import { Observable, Subject, take } from "rxjs";
+import { Observable, Subject, take, tap } from "rxjs";
 import { ProjectRest, type TaskCreatePayload } from "../../service/rest/project.rest";
 
 export class ProjectService {
@@ -46,49 +46,53 @@ export class ProjectService {
             })
     }
 
-    deleteProject(id: string): void {
-        this._project
+    deleteProject(id: string): Observable<any> {
+        return this._project
             .deleteProject(id)
-            .pipe(take(1))
-            .subscribe({
-                next: () => {
-                    this.project$.next(null);
-                    this.allTasks$.next([]);
-                    this.getProjects();
-                },
-                error: (error) => {
-                    this.project$.error(error);
-                }
-            })
+            .pipe(take(1),
+                tap({
+                    next: () => {
+                        this.project$.next(null);
+                        this.allTasks$.next([]);
+                        this.getProjects();
+                    },
+                    error: (error) => {
+                        this.project$.error(error);
+                    }
+                })
+            );
     }
 
-    createProject(projectName: string): void {
-        this._project
+    createProject(projectName: string): Observable<any> {
+        return this._project
             .createProject(projectName)
-            .pipe(take(1))
-            .subscribe({
-                next: (response) => {
-                    this.project$.next(response);
-                    this.getProjects()
-                },
-                error: (error) => {
-                    this.project$.error(error);
-                }
-            })
+            .pipe(take(1),
+                tap({
+                    next: (response) => {
+                        this.project$.next(response);
+                        this.getProjects()
+                    },
+                    error: (error) => {
+                        this.project$.error(error);
+                    }
+                })
+            );
     }
 
-    updateProject(id: string, projectName: string): void {
-        this._project
+    updateProject(id: string, projectName: string): Observable<any> {
+        return this._project
             .updateProject(id, projectName)
-            .pipe(take(1))
-            .subscribe({
-                next: (response) => {
-                    this.project$.next(response);
-                },
-                error: (error) => {
-                    this.project$.error(error);
-                }
-            })
+            .pipe(take(1),
+                tap({
+                    next: (response) => {
+                        this.project$.next(response);
+                        this.getProjects()
+                    },
+                    error: (error) => {
+                        this.project$.error(error);
+                    }
+                })
+            );
     }
 
     getTasks(id: string): void {

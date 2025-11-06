@@ -1,4 +1,4 @@
-import { Observable, Subject, take } from "rxjs";
+import { Observable, Subject, take, tap } from "rxjs";
 import { TaskRest, type TaskUpdatePayload } from "../../service/rest/task.rest";
 
 export class TaskService {
@@ -37,17 +37,18 @@ export class TaskService {
             })
     }
 
-    updateTask(id: string, task: TaskUpdatePayload): void {
-        this._task
+    updateTask(id: string, task: TaskUpdatePayload): Observable<any> {
+        return this._task
             .updateTask(id, task)
-            .pipe(take(1))
-            .subscribe({
-                next: (response) => {
-                    this.task$.next(response);
-                },
-                error: (error) => {
-                    this.task$.error(error);
-                }
-            })
+            .pipe(take(1),
+                tap({
+                    next: (response) => {
+                        this.task$.next(response);
+                    },
+                    error: (error) => {
+                        this.task$.error(error);
+                    }
+                })
+            )
     }
 }

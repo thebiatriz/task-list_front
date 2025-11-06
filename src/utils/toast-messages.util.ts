@@ -1,6 +1,6 @@
 export enum MessageToasts {
     //LOGIN
-    SUCCESS_LOGIN = "Login realizado",
+    SUCCESS_LOGIN = "Login realizado.",
 
     //USER
     SUCCESS_CREATE_USER = "O usuário foi criado.",
@@ -8,10 +8,15 @@ export enum MessageToasts {
     SUCCESS_DELETE_USER = "O usuário foi deletado.",
 
     //PROJECT
-    SUCCESS_CREATE_DONATION = "A doação foi registrada.",
+    SUCCESS_CREATE_PROJECT = "O projeto foi criado.",
+    SUCCESS_DELETE_PROJECT = "O projeto foi deletado.",
+    SUCCESS_UPDATE_PROJECT = "O projeto foi atualizado.",
+    ERROR_EMPTY_PROJECT_NAME = "O nome do projeto não pode estar vazio.",
 
     //TASK
-    SUCCESS_CREATE_SALE = "A venda foi registrada.",
+    SUCCESS_CREATE_TASK = "A atividade foi criada.",
+    SUCCESS_UPDATE_TASK = "A atividade foi atualizada.",
+    SUCCESS_DELETE_TASK = "A atividade foi deletada.",
 
     //ERROR
     ERROR_GENERIC = "Erro inesperado. Tente novamente mais tarde.",

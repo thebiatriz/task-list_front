@@ -7,7 +7,7 @@
         </h1>
         <div class="flex justify-end items-center md:mr-[2.5vw] md:pr-4 hover:bg-gray-50 rounded-full transition-colors">
             <Button v-if="showButtonRegister" @click="$emit('to-register')"
-                class="!rounded-full !bg-[#05A51D] hover:!bg-[#058D1A] items-center h-10" type="button"
+                class="!rounded-full !bg-[#2CA2C4] hover:!bg-[#39a6e0] items-center h-10" type="button"
                 icon="pi pi-plus" />
             <div v-else-if="showButtonBack" class="flex items-center cursor-pointer" @click="$emit('navigate-back')">
                 <Button class="!rounded-full !text-[#2CA2C4]" severity="secondary" text type="button"
