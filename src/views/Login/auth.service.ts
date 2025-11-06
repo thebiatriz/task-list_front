@@ -1,6 +1,6 @@
 import { AuthRequest, AuthResponse, AuthUser } from "../../models/auth.model";
 import { LoginRest } from "../../service/rest/login.rest";
-import { BehaviorSubject, Observable, Subject, tap } from "rxjs";
+import { BehaviorSubject, Observable, tap } from "rxjs";
 import { clearAuthData, getStoredUser, saveAuthData } from "../../utils/auth.storage";
 
 export class LoginService {
