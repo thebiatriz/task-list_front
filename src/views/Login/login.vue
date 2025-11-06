@@ -15,12 +15,12 @@
                     </div>
                     <div class="inline-flex flex-col gap-2">
                         <label for="username" class="text-indigo-100 font-semibold">Email</label>
-                        <InputText v-model="inputUserEmail" id="registration"
+                        <InputText v-model="inputUserEmail" required id="registration"
                             class="!bg-white/20 !border-0 !p-4 !text-white w-80" />
                     </div>
                     <div class="inline-flex flex-col gap-2">
                         <label for="password" class="text-indigo-100 font-semibold">Senha</label>
-                        <InputText v-model="inputUserPassword" id="password" maxlength="50"
+                        <InputText v-model="inputUserPassword" required minlength="4" id="password" maxlength="50"
                             class="!bg-white/20 !border-0 !p-4 !text-white w-80" type="password" />
                     </div>
                     <div class="flex items-center gap-4">
