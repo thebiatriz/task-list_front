@@ -68,7 +68,7 @@
 import { defineComponent } from "vue";
 import type { Task } from "../../models/task.model";
 import { TaskService } from "./task.service";
-import { finalize, type Subscription } from "rxjs";
+import { type Subscription } from "rxjs";
 import { ProjectService } from "../Project/project.service";
 import type { TaskUpdatePayload } from "../../service/rest/task.rest";
 import { ToastService } from "../../utils/toast-service.util";
@@ -119,16 +119,13 @@ export default defineComponent({
             else this.createTask();
         },
         getTasks(): void {
-            this.taskSubscription = this.projectService.allTasks
-                .pipe(
-                    finalize(() => {
-                        this.isLoading = false;
-                    })
-                ).subscribe({
+            this.taskSubscription = this.projectService.allTasks.subscribe({
                     next: (response) => {
                         this.allTasks = response.data
+                        this.isLoading = false;
                     }, error: (error) => {
                         console.log("Erro ao buscar os atividades: ", error)
+                        this.isLoading = false;
                     }
                 });
 

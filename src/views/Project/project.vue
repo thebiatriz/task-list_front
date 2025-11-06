@@ -55,7 +55,7 @@
 import { defineComponent } from "vue";
 import { Project } from "../../models/project.model";
 import { ProjectService } from "./project.service";
-import { finalize, type Subscription } from "rxjs";
+import { type Subscription } from "rxjs";
 import { ToastService } from "../../utils/toast-service.util";
 import { MessageToasts } from "../../utils/toast-messages.util";
 
@@ -153,16 +153,13 @@ export default defineComponent({
             }
         },
         getProjects(): void {
-            this.projectSubscription = this.projectService.allProjects
-                .pipe(
-                    finalize(() => {
-                        this.isLoading = false;
-                    })
-                ).subscribe({
+            this.projectSubscription = this.projectService.allProjects.subscribe({
                     next: (response) => {
-                        this.allProjects = response.data
+                        this.allProjects = response.data;
+                        this.isLoading = false;
                     }, error: (error) => {
-                        console.log("Erro ao buscar os projetos: ", error)
+                        console.log("Erro ao buscar os projetos: ", error);
+                        this.isLoading = false;
                     }
                 });
 
