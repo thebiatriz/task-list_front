@@ -10,7 +10,7 @@
                         {{ isCreatingAccount ? 'Criar Conta' : 'Fazer Login' }}</p>
                     <div v-if="isCreatingAccount" class="inline-flex flex-col gap-2">
                         <label for="username" class="text-indigo-100 font-semibold">Nome</label>
-                        <InputText v-model="inputUserName" required id="registration" maxlength="12"
+                        <InputText v-model="inputUserName" required id="registration" maxlength="50"
                             class="!bg-white/20 !border-0 !p-4 !text-white w-80" />
                     </div>
                     <div class="inline-flex flex-col gap-2">
